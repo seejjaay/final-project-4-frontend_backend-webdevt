@@ -36,6 +36,7 @@ export default function EventFormPage() {
   const { goBack } = useGoBack();
   const { user } = useAuth();
   const toast = useToast();
+  const homePath = user?.role === 'admin' ? '/admin/events' : '/organizer';
 
   // Form Fields
   const [title, setTitle] = useState('');
@@ -226,7 +227,7 @@ export default function EventFormPage() {
         toast.success(`"${payload.title}" is now on the calendar.`, { title: 'Event added' });
       }
 
-      goBack('/organizer');
+      goBack(homePath);
     } catch (err) {
       if (err.code === 'VENUE_CLASH' && err.conflict) {
         setFieldErrors((prev) => ({ ...prev, venueId: clashMessage(err.conflict) }));
@@ -453,7 +454,7 @@ export default function EventFormPage() {
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 type="button"
-                onClick={() => goBack('/organizer')}
+                onClick={() => goBack(homePath)}
                 className="px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all"
               >
                 Cancel

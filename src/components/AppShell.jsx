@@ -100,7 +100,6 @@ export default function AppShell({ children }) {
     if (role === 'admin') {
       return [
         calendarItem,
-        myEventsItem,
         reportsItem,
         usersItem,
         allEventsItem,
