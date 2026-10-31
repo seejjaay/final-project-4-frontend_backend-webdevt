@@ -1,9 +1,9 @@
 {
-  "name": "orgavents-ui-handoff",
+  "name": "orgavents",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "OrgaVents Frontend — Standalone UI handoff with dual-mode (Mock/Live) API layer",
+  "description": "OrgaVents — campus event management: React + Vite frontend with an Express + MongoDB API (mock or live mode)",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
