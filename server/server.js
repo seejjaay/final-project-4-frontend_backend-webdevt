@@ -1,6 +1,7 @@
 import 'dotenv/config';              // 1. FIRST, or JWT_SECRET will be undefined
 import express from 'express';
 import cors from 'cors';
+import mongoose from 'mongoose';
 import { connectDB } from './config/db.js';
 import sanitize from './middleware/sanitize.js';
 import errorHandler from './middleware/errorHandler.js';
@@ -27,7 +28,24 @@ app.put('/api/users/:userId/avatar', express.json({ limit: '300kb' }));
 app.use(express.json({ limit: '50kb' })); // 2. parse the body (small cap: no other endpoint needs more)
 app.use(sanitize);                   // 3. then clean it, before any route
 
-app.get('/api', (req, res) => res.json({ status: 'ok' }));   // health check
+// Public service info + health. Nothing sensitive: no secrets, no DB host, no versions of deps.
+const dbUp = () => mongoose.connection.readyState === 1;
+app.get('/api', (req, res) => res.json({
+  name: 'Orgavents API',
+  status: dbUp() ? 'ok' : 'degraded',
+  site: process.env.CLIENT_ORIGIN,
+  health: '/api/health',
+}));
+app.get('/api/health', (req, res) => {
+  const up = dbUp();
+  res.status(up ? 200 : 503).json({   // 503 lets Render/uptime monitors flag a dead DB
+    name: 'Orgavents API',
+    status: up ? 'ok' : 'degraded',
+    database: up ? 'connected' : 'disconnected',
+    uptime: Math.round(process.uptime()),   // seconds since this instance started
+    timestamp: new Date().toISOString(),
+  });
+});
 
 app.use('/api/users', userRoutes);
 app.use('/api/events', eventRoutes);

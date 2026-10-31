@@ -40,7 +40,7 @@ In `.env`: set `VITE_USE_MOCK=false`, point `MONGO_URI` at your database, set `A
 node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
 ```
 
-The admin (`admin@orgavents.edu`) gets `ADMIN_PASSWORD`. Demo users from `seed:demo` all use `Password123!` — the admin too, if you skip `npm run seed`. `seed:demo` refuses to run when `NODE_ENV=production`. Health check: `GET /api`.
+The admin (`admin@orgavents.edu`) gets `ADMIN_PASSWORD`. Demo users from `seed:demo` all use `Password123!` — the admin too, if you skip `npm run seed`. `seed:demo` refuses to run when `NODE_ENV=production`. Health check: `GET /api` (service info) and `GET /api/health` (DB state, uptime; 503 when the DB is down).
 
 ## Project Structure
 
